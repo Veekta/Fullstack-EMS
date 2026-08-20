@@ -1,7 +1,60 @@
-import React from "react";
+import { Toaster } from "react-hot-toast";
+import { Route, Routes, Navigate } from "react-router-dom";
+import Layout from "./pages/Layout.jsx";
+import Leave from "./pages/Leave.jsx";
+import PrintPayslip from "./pages/PrintPayslip.jsx";
+import Settings from "./pages/Settings.jsx";
+import LoginLanding from "./pages/LoginLanding.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import Employees from "./pages/Employees.jsx";
+import Payslips from "./pages/Payslips.jsx";
+import Attendance from "./pages/Attendance.jsx";
+import LoginForm from "./components/LoginForm.jsx";
 
 const App = () => {
-  return <div>App</div>;
+  return (
+    <>
+      <Toaster />
+      <Routes>
+        <Route path="/login" element={<LoginLanding />} />
+
+        <Route
+          path="/login/admin"
+          element={
+            <LoginForm
+              role="admin"
+              title="Admin Portal"
+              subtitle="Sign in to Manage Organization"
+            />
+          }
+        />
+
+        <Route
+          path="/login/employee"
+          element={
+            <LoginForm
+              role="employee"
+              title="Employee Portal"
+              subtitle="Sign in to Access Your Account"
+            />
+          }
+        />
+
+        <Route element={<Layout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/leave" element={<Leave />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/employees" element={<Employees />} />
+          <Route path="/payslips" element={<Payslips />} />
+          <Route path="/attendance" element={<Attendance />} />
+        </Route>
+
+        <Route path="/print/payslips/:id" element={<PrintPayslip />} />
+
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Routes>
+    </>
+  );
 };
 
 export default App;
