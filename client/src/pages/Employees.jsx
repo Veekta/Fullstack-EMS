@@ -22,11 +22,11 @@ const Employees = () => {
     setTimeout(() => {
       setLoading(false);
     }, 1000);
-  }, []);
+  }, [selectedDept]);
 
   useEffect(() => {
     fetchEmployees();
-  }, []);
+  }, [fetchEmployees]);
 
   const filtered = employees.filter((emp) =>
     `${emp.firstName} 
@@ -86,7 +86,6 @@ const Employees = () => {
       </div>
 
       {/* Employee cards */}
-
       {loading ? (
         <div className="flex justify-center p-12">
           <div
