@@ -11,7 +11,7 @@ import attendanceRouter from "./routes/attendanceRoutes.js";
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-//middleware
+//middlewarex
 app.use(cors());
 app.use(express.json());
 app.use(multer().none());

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { DEPARTMENTS } from "../constants/department";
+import { DEPARTMENTS } from "../constants/department.js";
 
 const employeeSchema = new mongoose.Schema(
   {
@@ -31,6 +31,6 @@ const employeeSchema = new mongoose.Schema(
 );
 
 const Employee =
-  mongoose.models.Employee || mongoose.model("Employee", userSchema);
+  mongoose.models.Employee || mongoose.model("Employee", employeeSchema);
 
 export default Employee;
