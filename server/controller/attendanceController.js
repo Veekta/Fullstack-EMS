@@ -1,5 +1,6 @@
 import Employee from "../models/Employee.js";
 import Attendance from "../models/Attendance.js";
+import { inngest } from "../inngest/index.js";
 
 // Clock in/out for employee
 //POST /api/attendance
@@ -31,12 +32,20 @@ export const clockInOut = async (req, res) => {
       const attendance = await Attendance.create({
         employeeId: employee._id,
         date: today,
-        chechIn: now,
+        checkIn: now,
         status: isLate ? "LATE" : "PRESENT",
       });
 
+      await inngest.send({
+        name: "employee/check-out",
+        data: {
+          employeeId: employee._id,
+          attendanceId: attendance._id,
+        },
+      });
+
       return res.json({ success: true, type: "CHECK_IN", data: attendance });
-    } else if (!existing.chechOut) {
+    } else if (!existing.checkOut) {
       const checkInTime = new Date(existing.checkIn).getTime();
       const diffMs = now.getTime() - checkInTime;
       const diffHours = (diffMs / 1000) * 60 * 60;
