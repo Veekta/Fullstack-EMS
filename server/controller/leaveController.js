@@ -1,6 +1,6 @@
 // Create leave
 
-import Employee from "../models/Employee";
+import Employee from "../models/Employee.js";
 import LeaveApplication from "../models/LeaveApplication.js";
 
 // POST /api/leaves
