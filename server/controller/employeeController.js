@@ -10,8 +10,8 @@ export const getEmployees = async (req, res) => {
     const where = {};
     if (department) where.department = department;
 
-    const employees = (await Employee.find(where))
-      .toSorted({ createdAt: -1 })
+    const employees = await Employee.find(where)
+      .sort({ createdAt: -1 })
       .populate("userId", "email role")
       .lean();
 
@@ -45,7 +45,7 @@ export const createEmployee = async (req, res) => {
       allowances,
       deductions,
       joinDate,
-      passsword,
+      password,
       role,
       bio,
     } = req.body;
@@ -54,7 +54,7 @@ export const createEmployee = async (req, res) => {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    const hashed = await bcrypt.hash(passsword, 10);
+    const hashed = await bcrypt.hash(password, 10);
     const user = await User.create({
       email,
       password: hashed,
@@ -62,6 +62,7 @@ export const createEmployee = async (req, res) => {
     });
 
     const employee = await Employee.create({
+      userId: user._id.toString(),
       firstName,
       lastName,
       email,
@@ -107,7 +108,7 @@ export const updateEmployee = async (req, res) => {
       employmentStatus,
     } = req.body;
 
-    const employee = await Employee.findById();
+    const employee = await Employee.findById(id);
     if (!employee) return res.status(404).json({ error: "Employee not found" });
 
     await Employee.findByIdAndUpdate(id, {

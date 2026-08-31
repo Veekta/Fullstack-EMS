@@ -44,7 +44,7 @@ export const getDashboard = async (req, res) => {
             employeeId: employee._id,
             date: {
               $gte: new Date(today.getFullYear(), today.getMonth(), 1),
-              $te: new Date(today.getFullYear(), today.getMonth() + 1, 1),
+              $lt: new Date(today.getFullYear(), today.getMonth() + 1, 1),
             },
           }),
           LeaveApplication.countDocuments({
@@ -52,7 +52,7 @@ export const getDashboard = async (req, res) => {
             status: "PENDING",
           }),
           Payslip.findOne({ employeeId: employee._id })
-            .sort({ createdAte: -1 })
+            .sort({ createdAt: -1 })
             .lean(),
         ]);
       return res.json({
