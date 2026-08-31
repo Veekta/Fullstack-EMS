@@ -1,5 +1,7 @@
 import { Loader2, Plus, X } from "lucide-react";
 import { useState } from "react";
+import api from "../../api/axios";
+import toast from "react-hot-toast";
 
 const GeneratePayslipForm = ({ employees, onSuccess }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,6 +19,18 @@ const GeneratePayslipForm = ({ employees, onSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+    try {
+      await api.post("/payslips", data);
+      setIsOpen(false);
+      onSuccess();
+    } catch (error) {
+      toast.error(error.response?.data?.error || error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -43,11 +57,13 @@ const GeneratePayslipForm = ({ employees, onSuccess }) => {
               className="block text-sm font-medium
             text-slate-700 mb-2
             "
-            ></label>
-            <select name="employeeId" require>
+            >
+              Employee
+            </label>
+            <select name="employeeId" required>
               {employees.map((e) => (
                 <option key={e.id} value={e.id}>
-                  {e.firstName} {e.lastName} ({e.position})
+                  {e.firstName} {e.lastName}
                 </option>
               ))}
             </select>
@@ -83,7 +99,7 @@ const GeneratePayslipForm = ({ employees, onSuccess }) => {
           {/* basic salary */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">
-              Allowances
+              Basic Salary
             </label>
             <input
               type="number"
@@ -120,7 +136,6 @@ const GeneratePayslipForm = ({ employees, onSuccess }) => {
               Cancel
             </button>
             <button
-              onClick={() => setIsOpen(false)}
               type="submit"
               disabled={loading}
               className="btn-primary flex items-center"

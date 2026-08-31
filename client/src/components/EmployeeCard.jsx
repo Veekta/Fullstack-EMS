@@ -1,8 +1,13 @@
 import { PencilIcon, Trash2Icon } from "lucide-react";
+import api from "../api/axios";
 
 const EmployeeCard = ({ employee, onDelete, onEdit }) => {
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this employee?")) return;
+    try {
+      await api.delete(`/employees/${employee.id}`);
+      onDelete();
+    } catch (error) {}
   };
 
   return (
@@ -28,16 +33,16 @@ const EmployeeCard = ({ employee, onDelete, onEdit }) => {
         "
         >
           {employee.department || "Remote"}
-          {employee.isDeleted && (
-            <span
-              className="bg-red-500/60 font-medium text-white 
+        </span>
+        {employee.isDeleted && (
+          <span
+            className="bg-red-500/60 font-medium text-white 
           px-2.5 py-1 text-xs rounded
           "
-            >
-              DELTETED
-            </span>
-          )}
-        </span>
+          >
+            DELTETED
+          </span>
+        )}
       </div>
 
       {!employee.isDeleted && (

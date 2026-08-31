@@ -21,13 +21,15 @@ export const createPayslip = async (req, res) => {
       basicSalary: Number(basicSalary),
       allowances: Number(allowances || 0),
       deductions: Number(deductions || 0),
+      netSalary,
     });
 
     return res.json({
       success: true,
-      data: payslip,
+      data: payslips,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error: "Failed" });
   }
 };
@@ -71,7 +73,7 @@ export const getPayslipById = async (req, res) => {
     const payslip = await Payslip.findById(req.params.id)
       .populate("employeeId")
       .lean();
-    if (!payslips) return res.status(404).json({ error: "Not found" });
+    if (!payslip) return res.status(404).json({ error: "Not found" });
 
     const result = {
       ...payslip,
@@ -81,6 +83,7 @@ export const getPayslipById = async (req, res) => {
 
     return res.json(result);
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error: "failed" });
   }
 };

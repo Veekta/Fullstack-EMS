@@ -38,7 +38,7 @@ export const login = async (req, res) => {
     };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expressIn: "7d",
+      expiresIn: "7d",
     });
 
     return res.json({ user: payload, token });
@@ -78,6 +78,7 @@ export const changePassword = async (req, res) => {
 
     return res.json({ success: true });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error: "Failed to change password" });
   }
 };

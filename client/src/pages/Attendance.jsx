@@ -5,6 +5,8 @@ import { CheckIcon } from "lucide-react";
 import CheckInButton from "../components/attendance/CheckInButton";
 import AttendanceStats from "../components/attendance/AttendanceStats";
 import AttendanceHistory from "../components/attendance/AttendanceHistory";
+import api from "../api/axios";
+import toast from "react-hot-toast";
 
 const Attendance = () => {
   const [history, setHistory] = useState([]);
@@ -12,10 +14,16 @@ const Attendance = () => {
   const [isDeleted, setIsDeleted] = useState(false);
 
   const fetchData = useCallback(async () => {
-    setHistory(dummyAttendanceData);
-    setTimeout(() => {
+    try {
+      const res = await api.get("/attendance");
+      const json = res.data;
+      setHistory(json.data || []);
+      if (json.employee?.isDeleted) setIsDeleted(true);
+    } catch (error) {
+      toast.error(error?.response?.data?.error || error?.messsage);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   }, []);
 
   useEffect(() => {
@@ -52,7 +60,7 @@ const Attendance = () => {
         </div>
       ) : (
         <div className="mb-8">
-          <CheckInButton todayRecord={today} onAction={fetchData} />
+          <CheckInButton todayRecord={todayRecord} onAction={fetchData} />
         </div>
       )}
 

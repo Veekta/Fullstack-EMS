@@ -22,7 +22,9 @@ const AttendanceHistory = ({ history }) => {
           </thead>
           <tbody>
             {history.length === 0 ? (
-              <tr>No record found</tr>
+              <tr>
+                <td>No record found </td>
+              </tr>
             ) : (
               history.map((record) => {
                 const dayType = getDayTypeDisplay(record);
