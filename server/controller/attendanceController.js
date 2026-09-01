@@ -48,7 +48,7 @@ export const clockInOut = async (req, res) => {
     } else if (!existing.checkOut) {
       const checkInTime = new Date(existing.checkIn).getTime();
       const diffMs = now.getTime() - checkInTime;
-      const diffHours = (diffMs / 1000) * 60 * 60;
+      const diffHours = diffMs / (1000 * 60 * 60);
 
       existing.checkOut = now;
 
